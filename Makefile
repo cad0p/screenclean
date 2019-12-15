@@ -4,13 +4,13 @@
 
 prefix=/usr/local
 
-override CFLAGS += -mmacosx-version-min=10.8
+override CFLAGS += -mmacosx-version-min=10.8 -Wall -Wextra
 
 all: build
 
-build: brightness
+build: screenclean
 
-brightness: brightness.o
+screenclean: screenclean.o
 	$(CC) $(CFLAGS) $(ARCH_FLAGS) \
 		-framework IOKit \
 		-framework ApplicationServices \
@@ -27,8 +27,8 @@ brightness: brightness.o
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(ARCH_FLAGS) $< -c -o $@
 
 clean:
-	/bin/rm -f brightness *.o
+	/bin/rm -f screenclean *.o
 
 install:
 	/bin/mkdir -p $(prefix)/bin
-	/usr/bin/install -s -m 0755 brightness $(prefix)/bin
+	/usr/bin/install -s -m 0755 screenclean $(prefix)/bin
