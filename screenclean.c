@@ -177,12 +177,12 @@ int main(int argc, char * const argv[]) {
   printf("%s", filename);
 
 
-  if((saveFile=fopen(filename, "r+")) == NULL) {
-	  if((saveFile=fopen(filename, "w+")) == NULL) {
-		  errexit("cannot open saveFile");
-		  // smadonnate
-	  }
-  }
+//  if((saveFile=fopen(filename, "r+")) == NULL) {
+//	  if((saveFile=fopen(filename, "w+")) == NULL) {
+//		  errexit("cannot open saveFile");
+//		  // smadonnate
+//	  }
+//  }
 
   float brightness[kMaxDisplays];
   if (action == ACTION_LIST) {
@@ -193,11 +193,20 @@ int main(int argc, char * const argv[]) {
 	errno = 0;
 	printf("%s", argv[0]);
 	if (strcmp(argv[0], "on") == 0) {
+		// open file for writing the oldBrightness on saveFile
+		if((saveFile=fopen(filename, "w+")) == NULL) {
+			errexit("cannot open saveFile");
+		}
+
 		for (int i = 0; i < kMaxDisplays; ++i) {
 			brightness[i] = 1;
 		}
 	}
 	else if (strcmp(argv[0], "off") == 0) {
+		// open file for reading and restoring the oldBrightness
+		if((saveFile=fopen(filename, "r+")) == NULL) {
+			errexit("cannot open saveFile");
+		}
 		if (fread(brightness,
 			   sizeof(float),
 			   kMaxDisplays,
